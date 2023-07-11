@@ -54,6 +54,22 @@ async function run() {
       res.send(result)
       console.log(check)
     })
+
+    app.get('/checkout', async (req, res)=> {
+      let query = {};
+      if(req.query?.email){
+        query = {email: req.query.email}
+      }
+      const result = await checkoutCollection.find(query).toArray();
+      res.send(result)
+    })
+
+    app.delete('/bookings/:id', async(req, res)=> {
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)};
+        const result = await checkoutCollection.deleteOne(query)
+        res.send(result)
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
