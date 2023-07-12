@@ -70,6 +70,20 @@ async function run() {
         const result = await checkoutCollection.deleteOne(query)
         res.send(result)
     })
+    app.patch('/bookings/:id', async(req, res)=> {
+        const id = req.params.id;
+        const filter = {_id : new ObjectId(id)};
+        const updatedBooking = req.body;
+        console.log(updatedBooking)
+        const options = {upsert: true};
+        const updatedStatus = {
+          $set : {
+            status : updatedBooking.status,
+          }
+        }
+        const result = await checkoutCollection.updateOne(filter, updatedStatus, options);
+        res.send(result)
+      })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
